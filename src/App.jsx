@@ -21,13 +21,29 @@ class App extends React.Component{
 
   checkIfUserIsLogged(){
     this._authService.isUserLogged()
-      .then(res => console.log(res))
+      .then(res => this.setState({
+        ...this.state,
+        userLogged: res.data
+      }))
       .catch(err => {
         this.setState({
           ...this.state,
           userLogged: false
         })
       });
+  }
+
+  login(obj){
+    const {email, password} = obj;
+    this._authService.login(email, password)
+      .then(res => this.setState({
+        ...this.state,
+        userLogged: res.data
+      }))
+      .catch(err => this.setState({
+        ...this.state,
+        userLogged: false
+      }));
   }
 
   logout(){
@@ -40,7 +56,7 @@ class App extends React.Component{
   }
 
   componentDidUpdate(){
-    console.log(this.state)
+    console.log(this.state.userLogged);
   }
 
   render(){
@@ -48,9 +64,9 @@ class App extends React.Component{
       <React.Fragment>
         <Navbar/>
         <Switch>
-          <Route exact path="/login" render={()=> <Login/>}/>
-          <Route exact path="/signup" render={()=> <Signup/>}/>
-          <Route exact path="/conversations" render={()=> <ConversationsList checkLogin={()=>this.checkIfUserIsLogged()}/>}/>
+          <Route exact path="/login" render={()=> <Login login={(loginObj)=>this.login(loginObj)} isUserLogged={this.state.userLogged}/>}/>
+          <Route exact path="/signup" render={()=> <Signup isUserLogged={this.state.userLogged}/>}/>
+          <Route exact path="/conversations" render={()=> <ConversationsList checkLogin={()=>this.checkIfUserIsLogged()} isUserLogged={this.state.userLogged}/>}/>
           <Route exact path="/logout" render={()=> <Logout logout={()=>this.logout()}/>}/>
           <Route render={()=> <Redirect to="/login"/>}/>
         </Switch>

@@ -81,7 +81,7 @@ class App extends React.Component{
           <Route exact path="/login" render={()=> <Login login={(loginObj)=>this.login(loginObj)} loggedUser={this.state.userLogged}/>}/>
           <Route exact path="/signup" render={()=> <Signup signup={(signupObj)=>this.signup(signupObj)} loggedUser={this.state.userLogged}/>}/>
           <Route exact path="/conversations" render={()=> <ConversationsList checkLogin={()=>this.checkIfUserIsLogged()} loggedUser={this.state.userLogged}/>}/>
-          <Route path="/conversations/:id" render={()=> <Conversation checkLogin={()=>this.checkIfUserIsLogged()} loggedUser={this.state.userLogged}/>}/>
+          <Route path="/conversations/:id" render={(props)=> <Conversation match={props.match} checkLogin={()=>this.checkIfUserIsLogged()} loggedUser={this.state.userLogged}/>}/>
           <Route exact path="/logout" render={()=> <Logout logout={()=>this.logout()}/>}/>
           <Route render={()=> <Redirect to="/login"/>}/>
         </Switch>

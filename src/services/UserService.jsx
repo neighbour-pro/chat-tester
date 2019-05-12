@@ -14,8 +14,21 @@ export default class UserService{
       .catch(err => console.log(err));
   }
 
-  getConversations(conversationId){
-    return this.service.get('conversation/'+conversationId)
+  getConversations(userId){
+    return this.service.get('conversation/'+userId)
+      .then(res => res)
+      .catch(err => console.log(err));
+  }
+
+  getConversation(conversationId){
+    return this.service.get('conversation/'+conversationId+'/messageList')
+      .then(res => res)
+      .catch(err => console.log(err));
+  }
+
+  addMessage(conversationId, userId, message){
+    
+    return this.service.post('conversation/'+conversationId+'/addMessage', {text:message, userId})
       .then(res => res)
       .catch(err => console.log(err));
   }

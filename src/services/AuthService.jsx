@@ -8,11 +8,5 @@ export default class AuthService{
     });
   }
 
-  login(email, password){
-    return this.service.post('/auth/login', {
-      email,
-      password
-    }, {withCredentials: true})
-    .then(res => res.data);
-  }
+  
 }

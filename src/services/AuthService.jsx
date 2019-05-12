@@ -11,11 +11,15 @@ export default class AuthService{
   isUserLogged(){
     return this.service.get('auth/logged')
       .then(res => res)
-      .catch(err => console.error(err));
   }
 
   login(email, password){
     return this.service.post('auth/login', {email, password})
+      .then(res => res);
+  }
+  
+  signup(name, email, password, confirmPassword, role){
+    return this.service.post('auth/signup', {name, email, password, confirmPassword, role})
       .then(res => res);
   }
 

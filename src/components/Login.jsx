@@ -1,4 +1,5 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import {Redirect} from 'react-router-dom';
 
 export default class Login extends Component {
   constructor(props){
@@ -23,11 +24,16 @@ export default class Login extends Component {
 
   render() {
     return (
-      <form onSubmit={(e)=>this.submitForm(e)}>
-        <input type="text" placeholder="Email" onChange={(e)=>this.handleChange(e, 'email')} name="email" value={this.state.email}/>
-        <input type="text" placeholder="Password" onChange={(e)=>this.handleChange(e, 'password')} name="password" value={this.state.password}/>
-        <button type="submit">Login</button>
-      </form>
+      <React.Fragment>
+        {
+          this.props.isUserLogged ? <Redirect to="/conversations"/> : null
+        }
+        <form onSubmit={(e)=>this.submitForm(e)}>
+          <input type="text" placeholder="Email" onChange={(e)=>this.handleChange(e, 'email')} name="email" value={this.state.email}/>
+          <input type="text" placeholder="Password" onChange={(e)=>this.handleChange(e, 'password')} name="password" value={this.state.password}/>
+          <button type="submit">Login</button>
+        </form>
+      </React.Fragment>
     )
   }
 }

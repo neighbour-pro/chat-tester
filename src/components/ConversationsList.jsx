@@ -1,4 +1,5 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import {Redirect} from 'react-router-dom';
 
 export default class ConversationsList extends Component {
 
@@ -8,9 +9,14 @@ export default class ConversationsList extends Component {
   
   render() {
     return (
-      <div>
-        Lista de conversaciones
-      </div>
+      <React.Fragment>
+        {
+          this.props.isUserLogged ? null : <Redirect to="/login"/>
+        }
+        <div>
+          Lista de conversaciones
+        </div>
+      </React.Fragment>
     )
   }
 }

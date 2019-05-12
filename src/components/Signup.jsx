@@ -6,7 +6,7 @@ export default class Signup extends Component {
     return (
       <React.Fragment>
         {
-          this.props.isUserLogged ? <Redirect to="/conversations"/> : null
+          this.props.loggedUser ? <Redirect to="/conversations"/> : null
         }
         <div>
           Signup

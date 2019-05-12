@@ -6,6 +6,7 @@ import Login from "./components/Login";
 import Signup from "./components/Signup";
 import Logout from "./components/Logout";
 import ConversationsList from "./components/ConversationsList";
+import Conversation from "./components/Conversation";
 import AuthService from "./services/AuthService";
 
 
@@ -77,9 +78,10 @@ class App extends React.Component{
       <React.Fragment>
         <Navbar/>
         <Switch>
-          <Route exact path="/login" render={()=> <Login login={(loginObj)=>this.login(loginObj)} isUserLogged={this.state.userLogged}/>}/>
-          <Route exact path="/signup" render={()=> <Signup signup={(signupObj)=>this.signup(signupObj)} isUserLogged={this.state.userLogged}/>}/>
-          <Route exact path="/conversations" render={()=> <ConversationsList checkLogin={()=>this.checkIfUserIsLogged()} isUserLogged={this.state.userLogged}/>}/>
+          <Route exact path="/login" render={()=> <Login login={(loginObj)=>this.login(loginObj)} loggedUser={this.state.userLogged}/>}/>
+          <Route exact path="/signup" render={()=> <Signup signup={(signupObj)=>this.signup(signupObj)} loggedUser={this.state.userLogged}/>}/>
+          <Route exact path="/conversations" render={()=> <ConversationsList checkLogin={()=>this.checkIfUserIsLogged()} loggedUser={this.state.userLogged}/>}/>
+          <Route path="/conversations/:id" render={()=> <Conversation checkLogin={()=>this.checkIfUserIsLogged()} loggedUser={this.state.userLogged}/>}/>
           <Route exact path="/logout" render={()=> <Logout logout={()=>this.logout()}/>}/>
           <Route render={()=> <Redirect to="/login"/>}/>
         </Switch>

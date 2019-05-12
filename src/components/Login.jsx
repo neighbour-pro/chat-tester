@@ -5,7 +5,7 @@ export default class Login extends Component {
   constructor(props){
     super(props)
     this.state = {
-      email: '1@1',
+      email: 'client@a.com',
       password: '1'
     };
   }
@@ -26,7 +26,7 @@ export default class Login extends Component {
     return (
       <React.Fragment>
         {
-          this.props.isUserLogged ? <Redirect to="/conversations"/> : null
+          this.props.loggedUser ? <Redirect to="/conversations"/> : null
         }
         <form onSubmit={(e)=>this.submitForm(e)}>
           <input type="text" placeholder="Email" onChange={(e)=>this.handleChange(e, 'email')} name="email" value={this.state.email}/>

@@ -8,5 +8,16 @@ export default class AuthService{
     });
   }
 
-  
+  isUserLogged(){
+    return this.service.get('auth/logged')
+      .then(res => res)
+      .catch(err => console.error(err));
+  }
+
+  logout(){
+    return this.service.post('auth/logout', {})
+      .then(res => res)
+      .catch(err => console.error(err));
+  }
+
 }

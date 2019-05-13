@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import UserService from '../services/UserService';
 import {Redirect} from 'react-router-dom';
+import io from 'socket.io-client';
 
 export default class Conversation extends Component {
 
@@ -13,6 +14,7 @@ export default class Conversation extends Component {
       }
     };
     this._userService = new UserService();
+    this.socket = io('http://localhost:5000');
   }
 
   componentDidMount(){
@@ -43,14 +45,22 @@ export default class Conversation extends Component {
 
   sendMessage(e){
     e.preventDefault();
-    console.log(this.state)
+    this.socket.emit('message', {
+      conversation_id: this.props.match.params.id,
+      message: this.state.text,
+      user_id: this.props.loggedUser._id
+    });
+    
     this._userService.addMessage(this.props.match.params.id, this.state.userId, this.state.text)
       .then(res => this._userService.getConversation(this.props.match.params.id))
-      .then(conversation => this.setState({
-        ...this.state,
-        text: '',
-        conversation: conversation.data.conversation
-      }))
+      .then(conversation => {
+        this.setState({
+          ...this.state,
+          text: '',
+          conversation: conversation.data.conversation
+        });
+        
+      })
       .catch(err => console.log(err))
   }
 
@@ -64,7 +74,7 @@ export default class Conversation extends Component {
           <h1>Lista de mensajes | {this.state.user_name}</h1>
           <ul>
             {
-              this.state.conversation.messages.map(message => <li key={message._id}><p>Hola mundo<span> | {message.user_id.name}</span></p></li>)
+              this.state.conversation.messages.map(message => <li key={message._id}><p>{message.text}<span> | {message.user_id.name}</span></p></li>)
             }
           </ul>
           <h2>Enviar mensajes</h2>

@@ -15,11 +15,30 @@ export default class Conversation extends Component {
     };
     this._userService = new UserService();
     this.socket = io('http://localhost:5000');
+    this.counter = 0;
   }
 
   componentDidMount(){
     this.props.checkLogin();
     if(this.props.loggedUser){
+      this.socket.emit('join', this.props.match.params.id);
+      this.socket.on('msg', message => {
+        const newMessage = {
+          _id: ++this.counter,
+          text: message.message,
+          user_id: {
+            _id: message.user_id,
+            name: message.user_name
+          }
+        };
+        const conversation = this.state.conversation;
+        conversation.messages.push(newMessage);
+        this.setState({
+          ...this.state,
+          conversation
+        });
+      });
+
       this.setState({
         ...this.state,
         userId: this.props.loggedUser._id,
@@ -48,9 +67,10 @@ export default class Conversation extends Component {
     this.socket.emit('message', {
       conversation_id: this.props.match.params.id,
       message: this.state.text,
+      user_name: this.props.loggedUser.name,
       user_id: this.props.loggedUser._id
     });
-    
+
     this._userService.addMessage(this.props.match.params.id, this.state.userId, this.state.text)
       .then(res => this._userService.getConversation(this.props.match.params.id))
       .then(conversation => {

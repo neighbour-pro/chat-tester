@@ -23,20 +23,14 @@ export default class Conversation extends Component {
     if(this.props.loggedUser){
       this.socket.emit('join', this.props.match.params.id);
       this.socket.on('msg', message => {
-        const newMessage = {
-          _id: ++this.counter,
-          text: message.message,
-          user_id: {
-            _id: message.user_id,
-            name: message.user_name
-          }
-        };
-        const conversation = this.state.conversation;
-        conversation.messages.push(newMessage);
-        this.setState({
-          ...this.state,
-          conversation
-        });
+        this._userService.getConversation(this.props.match.params.id)
+          .then(conversation => {
+            this.setState({
+              ...this.state,
+              conversation: conversation.data.conversation
+            });
+          })
+          .catch(err => console.log(err));
       });
 
       this.setState({
